@@ -1,8 +1,121 @@
-﻿
+﻿@model IEnumerable<human_resource_management.Models.PhongBan>
+
 @{
-    ViewBag.Title = "Statistical";
+    ViewBag.Title = "Thống kê nhân sự";
     Layout = "~/Areas/HumanResource/Views/Shared/_Layout.cshtml";
+
+    // Tạo một mảng đối tượng ẩn danh để chuyển sang JSON
+    var chartData = Model.Select(pb => new object[]
+    {
+        pb.tenPB,
+        pb.NhanViens?.Count ?? 0 // Toán tử null-coalescing (??) gọn gàng hơn
+                    }).ToList();
 }
 
-<h2>Statistical</h2>
+<style>
+    div.google-visualization-tooltip {
+        pointer-events: none !important;
+        border-radius: 8px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+        border: 1px solid #e5e7eb !important;
+    }
+</style>
 
+<div class="w-full">
+    <div class="mb-6 text-center">
+        <h2 class="text-2xl font-bold text-gray-800 uppercase">Thống kê số lượng nhân viên</h2>
+        <div class="h-1 w-20 bg-blue-500 mx-auto mt-2 rounded"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div class="bg-white rounded-lg shadow-md border border-gray-200">
+            <div class="bg-blue-600 px-4 py-3 border-b border-gray-200 rounded-t-lg">
+                <h3 class="text-white font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-table"></i> Chi tiết số liệu
+                </h3>
+            </div>
+
+            <div class="p-0 overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-gray-50 text-gray-600 text-sm uppercase leading-normal">
+                            <th class="py-3 px-6 border-b">Tên Phòng Ban</th>
+                            <th class="py-3 px-6 border-b text-center">Số Lượng NV</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm font-light">
+                        @if (Model != null && Model.Any())
+                        {
+                            foreach (var item in Model)
+                            {
+                                // Logic đếm gọn gàng
+                                var count = item.NhanViens?.Count ?? 0;
+
+                                <tr class="border-b border-gray-200 hover:bg-gray-100 transition-colors">
+                                    <td class="py-3 px-6 font-medium whitespace-nowrap">@item.tenPB</td>
+                                    <td class="py-3 px-6 text-center">
+                                        <span class="bg-blue-100 text-blue-800 py-1 px-3 rounded-full text-xs font-bold">
+                                            @count
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2" class="py-4 text-center text-gray-400 italic">Chưa có dữ liệu</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md border border-gray-200">
+            <div class="bg-green-600 px-4 py-3 border-b border-gray-200 rounded-t-lg">
+                <h3 class="text-white font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie"></i> Biểu đồ tỷ lệ
+                </h3>
+            </div>
+            <div class="p-4 flex justify-center items-center bg-white rounded-b-lg">
+                <div id="piechart" class="w-full" style="height: 350px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", { packages: ["corechart"] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var serverData = @Html.Raw(Json.Encode(chartData));
+
+        // Header của biểu đồ
+        var chartDataArray = [['Phòng Ban', 'Số Lượng']];
+
+        // Gộp header và dữ liệu từ server
+        chartDataArray = chartDataArray.concat(serverData);
+
+        var data = google.visualization.arrayToDataTable(chartDataArray);
+
+        var options = {
+            title: 'Tỷ lệ phân bố nhân sự',
+            is3D: false,
+            pieHole: 0.4,
+            tooltip: { isHtml: true },
+            chartArea: { left: '10%', top: '10%', width: '80%', height: '80%' },
+            titleTextStyle: { fontSize: 16, bold: true, color: '#374151' },
+            legend: { position: 'right', alignment: 'center', textStyle: { fontSize: 13 } },
+            colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#6366f1']
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    }
+
+    window.onresize = drawChart;
+</script>
