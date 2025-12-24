@@ -1,33 +1,107 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Trang chủ";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
-
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
+<!-- Hero Section -->
+<section class="bg-blue-600 text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center" data-aos="fade-up">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Hệ thống quản lý nhân sự</h1>
+            <p class="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
+                Giải pháp toàn diện cho việc quản lý nhân sự, lương thưởng và chấm công
             </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+            @Html.ActionLink("Bắt đầu ngay", "Login", "Account", null, new { @class = "inline-block bg-white text-blue-600 px-8 py-3 rounded font-medium hover:bg-gray-100 transition-colors material-shadow" })
+        </div>
     </div>
-</main>
+</section>
+
+<!-- Features Section -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">Tính năng nổi bật</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Hệ thống cung cấp đầy đủ các công cụ cần thiết để quản lý nhân sự hiệu quả
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-icons text-blue-600 text-3xl">people</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Quản lý nhân viên</h3>
+                <p class="text-gray-600">
+                    Theo dõi thông tin nhân viên, hồ sơ cá nhân và lịch sử làm việc một cách dễ dàng
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-icons text-green-600 text-3xl">payments</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Tính lương</h3>
+                <p class="text-gray-600">
+                    Tự động tính toán lương, phụ cấp và các khoản thu nhập khác cho nhân viên
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-icons text-purple-600 text-3xl">schedule</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Chấm công</h3>
+                <p class="text-gray-600">
+                    Quản lý thời gian làm việc, nghỉ phép và tăng ca của nhân viên chính xác
+                </p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="100">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-icons text-orange-600 text-3xl">description</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Hợp đồng</h3>
+                <p class="text-gray-600">
+                    Quản lý hợp đồng lao động, gia hạn và chấm dứt hợp đồng một cách chuyên nghiệp
+                </p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="200">
+                <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-icons text-red-600 text-3xl">bar_chart</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Báo cáo thống kê</h3>
+                <p class="text-gray-600">
+                    Xem báo cáo chi tiết về nhân sự, lương thưởng và hiệu suất làm việc
+                </p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="300">
+                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-6">
+                    <span class="material-icons text-indigo-600 text-3xl">security</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Bảo mật</h3>
+                <p class="text-gray-600">
+                    Phân quyền người dùng và bảo mật thông tin với tiêu chuẩn cao nhất
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-blue-600 text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold mb-4">Sẵn sàng bắt đầu?</h2>
+        <p class="text-xl text-blue-100 mb-8">
+            Đăng nhập vào hệ thống để trải nghiệm các tính năng quản lý nhân sự hiện đại
+        </p>
+        @Html.ActionLink("Đăng nhập ngay", "Login", "Account", null, new { @class = "inline-block bg-white text-blue-600 px-8 py-3 rounded font-medium hover:bg-gray-100 transition-colors material-shadow" })
+    </div>
+</section>

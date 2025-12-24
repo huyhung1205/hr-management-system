@@ -1,9 +1,100 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "Giới thiệu";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
 
-    <p>Use this area to provide additional information.</p>
-</main>
+<!-- Hero Section -->
+<section class="bg-blue-600 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center" data-aos="fade-up">
+            <h1 class="text-4xl font-bold mb-4">Giới thiệu về hệ thống</h1>
+            <p class="text-xl text-blue-100">
+                Giải pháp quản lý nhân sự toàn diện cho doanh nghiệp hiện đại
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- About Content -->
+<section class="py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Mission -->
+        <div class="mb-16" data-aos="fade-up">
+            <div class="bg-white p-8 rounded-lg material-shadow">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Sứ mệnh</h2>
+                <p class="text-gray-600 leading-relaxed">
+                    Hệ thống quản lý nhân sự của chúng tôi được phát triển với mục tiêu cung cấp một giải pháp 
+                    toàn diện, dễ sử dụng và hiệu quả cho việc quản lý nguồn nhân lực trong doanh nghiệp. 
+                    Chúng tôi cam kết mang đến những công cụ tốt nhất để giúp doanh nghiệp tối ưu hóa quy trình 
+                    làm việc và nâng cao năng suất.
+                </p>
+            </div>
+        </div>
+
+        <!-- Key Points -->
+        <div class="grid md:grid-cols-2 gap-8 mb-16">
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="100">
+                <div class="flex items-start mb-4">
+                    <span class="material-icons text-blue-600 text-3xl mr-4">check_circle</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Dễ sử dụng</h3>
+                        <p class="text-gray-600">
+                            Giao diện trực quan, thân thiện với người dùng, không yêu cầu kiến thức chuyên môn cao.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="200">
+                <div class="flex items-start mb-4">
+                    <span class="material-icons text-green-600 text-3xl mr-4">speed</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Hiệu quả cao</h3>
+                        <p class="text-gray-600">
+                            Tự động hóa các quy trình, giảm thiểu thời gian xử lý công việc và tăng năng suất.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="300">
+                <div class="flex items-start mb-4">
+                    <span class="material-icons text-purple-600 text-3xl mr-4">security</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Bảo mật tuyệt đối</h3>
+                        <p class="text-gray-600">
+                            Dữ liệu được mã hóa và bảo vệ với các tiêu chuẩn bảo mật cao nhất.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-lg material-shadow" data-aos="fade-up" data-aos-delay="400">
+                <div class="flex items-start mb-4">
+                    <span class="material-icons text-orange-600 text-3xl mr-4">support_agent</span>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Hỗ trợ tận tình</h3>
+                        <p class="text-gray-600">
+                            Đội ngũ hỗ trợ luôn sẵn sàng giải đáp mọi thắc mắc và hỗ trợ người dùng.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="grid md:grid-cols-3 gap-8" data-aos="fade-up">
+            <div class="bg-blue-600 text-white p-8 rounded-lg material-shadow text-center">
+                <div class="text-4xl font-bold mb-2">100+</div>
+                <div class="text-blue-100">Doanh nghiệp tin dùng</div>
+            </div>
+            <div class="bg-green-600 text-white p-8 rounded-lg material-shadow text-center">
+                <div class="text-4xl font-bold mb-2">5000+</div>
+                <div class="text-green-100">Người dùng hoạt động</div>
+            </div>
+            <div class="bg-purple-600 text-white p-8 rounded-lg material-shadow text-center">
+                <div class="text-4xl font-bold mb-2">99.9%</div>
+                <div class="text-purple-100">Thời gian hoạt động</div>
+            </div>
+        </div>
+    </div>
+</section>

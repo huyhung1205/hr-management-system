@@ -1,39 +1,90 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <title>@ViewBag.Title - Quản lý nhân sự</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        .material-shadow {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .material-shadow-sm {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+    </style>
 </head>
-<body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                </ul>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white material-shadow sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    @Html.ActionLink("Quản lý nhân sự", "Index", "Home", new { area = "" }, new { @class = "text-xl font-medium text-blue-600 hover:text-blue-700 transition-colors flex items-center" })
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex items-center space-x-1">
+                    @Html.ActionLink("Trang chủ", "Index", "Home", new { area = "" }, new { @class = "px-4 py-2 rounded text-gray-700 hover:bg-gray-100 transition-colors font-medium" })
+                    @Html.ActionLink("Giới thiệu", "About", "Home", new { area = "" }, new { @class = "px-4 py-2 rounded text-gray-700 hover:bg-gray-100 transition-colors font-medium" })
+                    @Html.ActionLink("Liên hệ", "Contact", "Home", new { area = "" }, new { @class = "px-4 py-2 rounded text-gray-700 hover:bg-gray-100 transition-colors font-medium" })
+                    @Html.ActionLink("Mã hóa", "Hashed", "Home", new { area = "" }, new { @class = "px-4 py-2 rounded text-gray-700 hover:bg-gray-100 transition-colors font-medium" })
+                </div>
+                
+                <!-- User Info / Login -->
+                <div class="flex items-center space-x-3">
+                    @if (Session["UserName"] != null)
+                    {
+                        <div class="flex items-center space-x-3">
+                            <span class="text-gray-700 font-medium">@Session["UserName"]</span>
+                            <span class="px-3 py-1 bg-blue-600 text-white rounded text-sm font-medium">@Session["UserRole"]</span>
+                            @Html.ActionLink("Đăng xuất", "Logout", "Account", null, new { @class = "px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors font-medium material-shadow-sm" })
+                        </div>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Đăng nhập", "Login", "Account", null, new { @class = "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors font-medium material-shadow-sm" })
+                    }
+                </div>
             </div>
         </div>
     </nav>
-    <div class="container body-content">
+
+    <!-- Main Content -->
+    <main>
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center text-gray-600">
+                <p class="font-medium">&copy; @DateTime.Now.Year - Hệ thống quản lý nhân sự</p>
+            </div>
+        </div>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+    
+    <!-- AOS Animation Script -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
+    </script>
 </body>
 </html>

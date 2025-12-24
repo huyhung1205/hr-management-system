@@ -26,5 +26,10 @@ namespace human_resource_management.Controllers
 
             return View();
         }
+
+        public ActionResult Hashed()
+        {
+            return View();
+        }
     }
 }

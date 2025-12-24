@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using human_resource_management.Filters;
 
 namespace human_resource_management.Areas.Employee.Controllers
 {
+    [RoleAuthorize("employee")]
     public class HomeController : Controller
     {
         // GET: Employee/Home
