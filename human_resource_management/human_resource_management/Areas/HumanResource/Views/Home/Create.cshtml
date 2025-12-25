@@ -1,0 +1,278 @@
+﻿@model human_resource_management.Models.FormModel.NhanVienForm
+
+@{
+    ViewBag.Title = "Quản lý nhân viên";
+    Layout = "~/Areas/HumanResource/Views/Shared/_Layout.cshtml";
+}
+
+<div class="max-w-4xl mx-auto space-y-6 animate-fade-in py-6">
+    <!-- Thanh điều hướng (Breadcrumb) và Nút quay lại -->
+    <div class="flex items-center justify-between mb-4">
+        <nav class="flex text-sm text-gray-500 gap-2">
+            <a href="@Url.Action("Index", "Home")" class="hover:text-blue-600 transition-colors">Trang chủ</a>
+            <span>/</span>
+            <a href="@Url.Action("ManagerEmployee", "Home")" class="hover:text-blue-600 transition-colors">Quản lý nhân viên</a>
+            <span>/</span>
+            <span class="text-gray-800 font-medium">Thêm mới hồ sơ</span>
+        </nav>
+        <a href="@Url.Action("ManagerEmployee", "Home")" class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-800 font-medium transition-colors">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách
+        </a>
+    </div>
+
+    <!-- Tiêu đề trang nổi bật với Gradient -->
+    <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-8 rounded-2xl shadow-lg text-white mb-8">
+        <h2 class="text-3xl font-bold">Tạo hồ sơ nhân sự</h2>
+        <p class="text-blue-100 mt-2">Vui lòng cung cấp chính xác thông tin nhân viên để lưu trữ vào hệ thống quản lý.</p>
+    </div>
+
+    <!-- Bắt đầu Form nhập liệu -->
+    @using (Html.BeginForm("Create", "Home", FormMethod.Post, new { @class = "space-y-8" }))
+    {
+        @Html.AntiForgeryToken()
+        <!-- Tóm tắt lỗi Validation nếu có -->
+        @Html.ValidationSummary(true, "", new { @class = "text-red-500 bg-red-50 p-4 rounded-xl border border-red-100 mb-6" })
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            
+            <!-- Phần 1: Thông tin cá nhân cơ bản -->
+            <div class="p-6 border-b border-gray-100 flex items-center gap-4 bg-gray-50/50">
+                <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold">
+                    1
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">Thông tin cá nhân</h3>
+                </div>
+            </div>
+
+            <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Nhập Họ và Tên -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.hoTen, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        @Html.TextBoxFor(m => m.hoTen, new { @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all", placeholder = "Ví dụ: Nguyễn Văn A" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.hoTen, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+
+                <!-- Chọn Ngày sinh -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.ngaySinh, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </span>
+                        @Html.TextBoxFor(m => m.ngaySinh, "{0:yyyy-MM-dd}", new { @type = "date", @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ngaySinh, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+
+                <!-- Chọn Giới tính (Radio buttons) -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.gioiTinh, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="flex gap-4 p-3 bg-gray-50 rounded-xl border border-gray-200 mt-1">
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            @Html.RadioButtonFor(m => m.gioiTinh, true, new { @class = "w-4 h-4 text-blue-600 focus:ring-blue-500" })
+                            <span class="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">Nam</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            @Html.RadioButtonFor(m => m.gioiTinh, false, new { @class = "w-4 h-4 text-blue-600 focus:ring-blue-500" })
+                            <span class="text-sm font-medium text-gray-600 group-hover:text-blue-600 transition-colors">Nữ</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Nhập Số điện thoại -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.dienThoai, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-phone"></i>
+                        </span>
+                        @Html.TextBoxFor(m => m.dienThoai, new { @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all", placeholder = "Số điện thoại liên hệ" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.dienThoai, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+
+                <!-- Nhập Email chính thức -->
+                <div class="space-y-2 md:col-span-2">
+                    @Html.LabelFor(m => m.email, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-envelope"></i>
+                        </span>
+                        @Html.TextBoxFor(m => m.email, new { @type = "email", @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all", placeholder = "email@congty.com" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.email, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+
+                <!-- Nhập Địa chỉ tạm trú/thường trú -->
+                <div class="space-y-2 md:col-span-2">
+                    @Html.LabelFor(m => m.diaChi, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pt-4 text-gray-400">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </span>
+                        @Html.TextAreaFor(m => m.diaChi, new { @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all min-h-[100px]", placeholder = "Địa chỉ chi tiết..." })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.diaChi, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+            </div>
+
+            <!-- Phần 2: Thông tin công việc & Vị trí -->
+            <div class="p-6 border-b border-t border-gray-100 flex items-center gap-4 bg-gray-50/50">
+                <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center font-bold">
+                    2
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">Thông tin công việc</h3>
+                </div>
+            </div>
+
+            <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Chọn Phòng ban từ danh sách -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.maPB, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-building"></i>
+                        </span>
+                        @Html.DropDownListFor(m => m.maPB, (SelectList)ViewBag.maPB, "-- Chọn phòng ban làm việc --", new { @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none" })
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.maPB, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+
+                <!-- Nhập Chức vụ/Vị trí công tác -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.chucVu, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </span>
+                        @Html.TextBoxFor(m => m.chucVu, new { @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all", placeholder = "Ví dụ: Chuyên viên Phân tích" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.chucVu, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+
+                <!-- Chọn Ngày chính thức gia nhập -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.ngayVaoLam, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-clock"></i>
+                        </span>
+                        @Html.TextBoxFor(m => m.ngayVaoLam, "{0:yyyy-MM-dd}", new { @type = "date", @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.ngayVaoLam, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+
+                <!-- Chọn Trạng thái nhân sự hiện tại -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.trangThaiLamViec, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </span>
+                        @Html.DropDownListFor(m => m.trangThaiLamViec, new SelectList(new[] { "Đang làm việc", "Thực tập", "Sử dụng thử việc", "Đã rời công ty" }), new { @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none" })
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.trangThaiLamViec, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+            </div>
+
+            <!-- Phần 3: Thông tin hợp đồng khởi tạo -->
+            <div class="p-6 border-b border-t border-gray-100 flex items-center gap-4 bg-gray-50/50">
+                <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center font-bold">
+                    3
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-gray-800">Thông tin hợp đồng</h3>
+
+                </div>
+            </div>
+
+            <div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Chọn Loại hợp đồng -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.loaiHD, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-file-contract"></i>
+                        </span>
+                        @Html.DropDownListFor(m => m.loaiHD, new SelectList(new[] { 
+                            new { Value = 1, Text = "Hợp đồng thử việc" },
+                            new { Value = 2, Text = "Hợp đồng thời hạn 1 năm" },
+                            new { Value = 3, Text = "Hợp đồng không thời hạn" }
+                        }, "Value", "Text"), "-- Chọn loại hợp đồng --", new { @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all appearance-none" })
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-gray-400">
+                            <i class="fa-solid fa-chevron-down text-xs"></i>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(m => m.loaiHD, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+
+                <!-- Nhập Lương cơ bản -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.luongCoBan, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                        </span>
+                        @Html.TextBoxFor(m => m.luongCoBan, new { @type = "number", @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all", placeholder = "VD: 5000000" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.luongCoBan, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+
+                <!-- Nhập Hệ số lương -->
+                <div class="space-y-2">
+                    @Html.LabelFor(m => m.heSoLuong, new { @class = "block text-sm font-bold text-gray-700" })
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </span>
+                        @Html.TextBoxFor(m => m.heSoLuong, new { @type = "number", @step = "0.1", @class = "w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all", placeholder = "VD: 2.34" })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.heSoLuong, "", new { @class = "text-xs text-red-500 font-medium mt-1" })
+                </div>
+            </div>
+
+            <!-- Khu vực Nút bấm thao tác cuối Form -->
+            <div class="p-8 bg-gray-50 border-t border-gray-100 flex items-center justify-end gap-4 mt-6">
+                <!-- Nút quay lại danh sách -->
+                <a href="@Url.Action("ManagerEmployee", "Home")" class="px-6 py-3 text-gray-600 font-bold hover:text-gray-800 transition-colors cursor-pointer">
+                    Hủy
+                </a>
+                <!-- Nút Gửi Form đi xử lý -->
+                <button type="submit" class="inline-flex items-center gap-2 px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg shadow-blue-200 transition-all active:scale-95">
+                    <i class="fa-solid fa-floppy-disk"></i> Lưu hồ sơ nhân viên
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function() {
+            // Tự động kích hoạt kiểm tra tính hợp lệ ngay khi người dùng rời khỏi ô nhập liệu (Blur event)
+            // Điều này giúp hiển thị lỗi ngay lập tức mà không cần đợi bấm nút Lưu
+            $('form input, form select, form textarea').on('blur', function () {
+                $(this).valid();
+            });
+
+            // Tùy chọn: Tự động điền ngày hiện tại vào ô 'Ngày vào làm' nếu đang để trống
+            const ngayVaoLamInput = $('input[name="ngayVaoLam"]');
+            if (ngayVaoLamInput.length && !ngayVaoLamInput.val()) {
+                const today = new Date().toISOString().split('T')[0];
+                ngayVaoLamInput.val(today);
+            }
+        });
+    </script>
+}

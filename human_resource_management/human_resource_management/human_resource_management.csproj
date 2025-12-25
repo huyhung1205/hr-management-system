@@ -143,6 +143,9 @@
     <Compile Include="Models\BangLuongThang.cs" />
     <Compile Include="Models\ChamCong.cs" />
     <Compile Include="Models\ChiTietBangLuong.cs" />
+    <Compile Include="Models\FormModel\NhanVienForm.cs" />
+    <Compile Include="Models\FormModel\PhongBanForm.cs" />
+    <Compile Include="Models\FormModel\TaiKhoanForm.cs" />
     <Compile Include="Models\HopDong.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\ModelDBContext.cs" />
@@ -191,6 +194,7 @@
     <Content Include="Areas\HumanResource\Views\Home\ManagerEmployee.cshtml" />
     <Content Include="Areas\HumanResource\Views\Home\Salary.cshtml" />
     <Content Include="Areas\HumanResource\Views\Home\Statistical.cshtml" />
+    <Content Include="Areas\HumanResource\Views\Home\Create.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

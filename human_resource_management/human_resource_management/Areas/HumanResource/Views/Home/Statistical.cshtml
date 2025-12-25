@@ -2,6 +2,13 @@
 @{
     ViewBag.Title = "Statistical";
     Layout = "~/Areas/HumanResource/Views/Shared/_Layout.cshtml";
+
+    // Tạo một mảng đối tượng ẩn danh để chuyển sang JSON
+    var chartData = Model.Select(pb => new object[]
+    {
+        pb.tenPB,
+        pb.NhanViens?.Count ?? 0 // Toán tử null-coalescing (??) gọn gàng hơn
+    }).ToList();
 }
 
 <h2>Statistical</h2>
