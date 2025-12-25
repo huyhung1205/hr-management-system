@@ -22,16 +22,16 @@ namespace human_resource_management.Filters
                 return false;
             }
 
-            // Get role from session
-            var userRole = httpContext.Session["UserRole"]?.ToString()?.ToLower();
+            // Get role from session and trim whitespace
+            var userRole = httpContext.Session["UserRole"]?.ToString()?.Trim();
 
             if (string.IsNullOrEmpty(userRole))
             {
                 return false;
             }
 
-            // Check if user's role is in the allowed roles list
-            return AllowedRoles.Any(role => role.ToLower() == userRole);
+            // Check if user's role is in the allowed roles list (case-insensitive comparison)
+            return AllowedRoles.Any(role => role.Trim().Equals(userRole, System.StringComparison.OrdinalIgnoreCase));
         }
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
@@ -47,21 +47,21 @@ namespace human_resource_management.Filters
             {
                 // User is authenticated but doesn't have the right role
                 // Redirect to access denied or their appropriate area
-                var userRole = filterContext.HttpContext.Session["UserRole"]?.ToString()?.ToLower();
+                var userRole = filterContext.HttpContext.Session["UserRole"]?.ToString()?.Trim();
 
                 switch (userRole)
                 {
-                    case "admin":
+                    case "Admin":
                         filterContext.Result = new RedirectToRouteResult(
                             new RouteValueDictionary(new { controller = "Home", action = "Index", area = "Admin" })
                         );
                         break;
-                    case "hr":
+                    case "Nhân sự":
                         filterContext.Result = new RedirectToRouteResult(
                             new RouteValueDictionary(new { controller = "Home", action = "Index", area = "HumanResource" })
                         );
                         break;
-                    case "employee":
+                    case "Nhân viên":
                         filterContext.Result = new RedirectToRouteResult(
                             new RouteValueDictionary(new { controller = "Home", action = "Index", area = "Employee" })
                         );

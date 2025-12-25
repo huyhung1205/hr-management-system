@@ -17,7 +17,7 @@ namespace human_resource_management.Areas.HumanResource
             context.MapRoute(
                 "HumanResource_default",
                 "HumanResource/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

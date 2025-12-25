@@ -133,6 +133,8 @@
     <Compile Include="Areas\Employee\Controllers\HomeController.cs" />
     <Compile Include="Areas\Employee\EmployeeAreaRegistration.cs" />
     <Compile Include="Areas\HumanResource\Controllers\HomeController.cs" />
+    <Compile Include="Areas\HumanResource\Data\EmployeeSalaryViewModel.cs" />
+    <Compile Include="Areas\HumanResource\Data\SalaryDetailViewModel.cs" />
     <Compile Include="Areas\HumanResource\HumanResourceAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -227,7 +229,6 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Employee\Data\" />
-    <Folder Include="Areas\HumanResource\Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

@@ -7,7 +7,7 @@ using human_resource_management.Filters;
 
 namespace human_resource_management.Areas.Admin.Controllers
 {
-    [RoleAuthorize("admin")]
+    [RoleAuthorize("Admin")]
     public class HomeController : Controller
     {
         // GET: Admin/Home

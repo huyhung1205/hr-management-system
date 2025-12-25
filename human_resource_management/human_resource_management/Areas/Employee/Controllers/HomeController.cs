@@ -7,7 +7,7 @@ using human_resource_management.Filters;
 
 namespace human_resource_management.Areas.Employee.Controllers
 {
-    [RoleAuthorize("employee")]
+    [RoleAuthorize("Nhân viên")]
     public class HomeController : Controller
     {
         // GET: Employee/Home

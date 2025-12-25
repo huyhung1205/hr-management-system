@@ -189,6 +189,9 @@ GO
         (9, 2025, N'Support Team', 0, N'Tháng 9'),
         (10, 2025, N'Support Team', 0, N'Tháng 10');
 
+	select * from BangLuongThang
+	select * from ChiTietBangLuong
+
     INSERT INTO ChiTietBangLuong (maBangLuongThang, maNV, luongThucNhan) VALUES
         (1, 1, 32000000),
         (2, 2, 28000000),
