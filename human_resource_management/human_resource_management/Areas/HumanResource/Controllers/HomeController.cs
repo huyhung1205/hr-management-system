@@ -25,14 +25,36 @@ namespace human_resource_management.Areas.HumanResource.Controllers
         /// <summary>
         /// GET: Quản lý nhân viên
         /// </summary>
-        public ActionResult ManagerEmployee()
+        /// <summary>
+        /// GET: Quản lý nhân viên
+        /// Có tích hợp tìm kiếm theo Tên, Mã NV, Tên Phòng Ban
+        /// </summary>
+        public ActionResult ManagerEmployee(string searchString)
         {
-            var nhanViens = db.NhanViens
+            // 1. Khởi tạo query (chưa chạy ngay lệnh SQL)
+            var query = db.NhanViens
                 .Include("PhongBan")
                 .Include("TaiKhoan")
                 .Include("HopDongs")
-                .ToList();
-            return View(nhanViens);
+                .AsQueryable(); // Dùng AsQueryable để có thể nối thêm điều kiện lọc
+
+            // 2. Kiểm tra nếu có từ khóa tìm kiếm
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                // Chuyển từ khóa về chữ thường để tìm kiếm không phân biệt hoa thường (tùy config database)
+                // Lọc theo: Mã NV hoặc Họ Tên hoặc Tên Phòng Ban
+                query = query.Where(nv =>
+                    nv.hoTen.Contains(searchString) ||
+                    nv.maNV.ToString().Contains(searchString) ||
+                    (nv.PhongBan != null && nv.PhongBan.tenPB.Contains(searchString))
+                );
+            }
+
+            // 3. Lưu lại từ khóa tìm kiếm để hiển thị lại trên ô input ở View
+            ViewBag.CurrentFilter = searchString;
+
+            // 4. Thực thi query và trả về danh sách
+            return View(query.ToList());
         }
 
         #region Thêm mới nhân viên

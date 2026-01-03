@@ -26,3 +26,4 @@ obj/
 # User-specific config
 Web.config.user
 appsettings.Development.json
+*Web.config
