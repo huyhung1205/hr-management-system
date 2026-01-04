@@ -10,12 +10,18 @@ using human_resource_management.Areas.HumanResource.Data;
 namespace human_resource_management.Areas.HumanResource.Controllers
 {
     [RoleAuthorize("Nhân sự")]
+    /// <summary>
+    /// Controller chính cho phân hệ Nhân sự (HR).
+    /// Chứa các chức năng quản lý nhân viên, tính lương và thống kê báo cáo.
+    /// Yêu cầu quyền "Nhân sự" để truy cập.
+    /// </summary>
     public class HomeController : Controller
     {
         private ModelDBContext db = new ModelDBContext();
 
         /// <summary>
         /// GET: Trang chủ HR
+        /// Hiển thị Dashboard chính của phân hệ nhân sự.
         /// </summary>
         public ActionResult Index()
         {
@@ -23,38 +29,70 @@ namespace human_resource_management.Areas.HumanResource.Controllers
         }
 
         /// <summary>
-        /// GET: Quản lý nhân viên
+        /// GET: Quản lý danh sách nhân viên.
+        /// - Hiển thị danh sách nhân viên dạng bảng.
+        /// - Hỗ trợ tìm kiếm theo nhiều tiêu chí (Tên, Mã, Phòng ban).
+        /// - Hỗ trợ phân trang dữ liệu.
         /// </summary>
-        /// <summary>
-        /// GET: Quản lý nhân viên
-        /// Có tích hợp tìm kiếm theo Tên, Mã NV, Tên Phòng Ban
-        /// </summary>
-        public ActionResult ManagerEmployee(string searchString)
+        /// <param name="searchString">Từ khóa tìm kiếm</param>
+        /// <param name="page">Số trang hiện tại (mặc định là 1)</param>
+        public ActionResult ManagerEmployee(string searchString, int? page)
         {
-            // 1. Khởi tạo query (chưa chạy ngay lệnh SQL)
+            int pageSize = 10; // Số lượng bản ghi trên mỗi trang
+            int pageNumber = (page ?? 1);
+
+            // 1. Khởi tạo query
             var query = db.NhanViens
                 .Include("PhongBan")
                 .Include("TaiKhoan")
                 .Include("HopDongs")
-                .AsQueryable(); // Dùng AsQueryable để có thể nối thêm điều kiện lọc
+                .AsQueryable();
 
             // 2. Kiểm tra nếu có từ khóa tìm kiếm
             if (!string.IsNullOrEmpty(searchString))
             {
-                // Chuyển từ khóa về chữ thường để tìm kiếm không phân biệt hoa thường (tùy config database)
-                // Lọc theo: Mã NV hoặc Họ Tên hoặc Tên Phòng Ban
-                query = query.Where(nv =>
-                    nv.hoTen.Contains(searchString) ||
-                    nv.maNV.ToString().Contains(searchString) ||
-                    (nv.PhongBan != null && nv.PhongBan.tenPB.Contains(searchString))
-                );
+                searchString = searchString.Trim();
+                int searchId;
+                bool isId = int.TryParse(searchString, out searchId);
+
+                if (isId)
+                {
+                    // Nếu là số: Tìm chính xác Mã NV (Hoặc Tên/Phòng ban có chứa số này)
+                    // Thay vì Contains() gây ra việc tìm "1" ra "11", "12"... giờ chỉ ra "1"
+                    query = query.Where(nv =>
+                        nv.maNV == searchId ||
+                        nv.hoTen.Contains(searchString) ||
+                        (nv.PhongBan != null && nv.PhongBan.tenPB.Contains(searchString))
+                    );
+                }
+                else
+                {
+                    // Nếu không phải số: Chỉ tìm theo Tên hoặc Phòng Ban
+                    query = query.Where(nv =>
+                        nv.hoTen.Contains(searchString) ||
+                        (nv.PhongBan != null && nv.PhongBan.tenPB.Contains(searchString))
+                    );
+                }
             }
 
-            // 3. Lưu lại từ khóa tìm kiếm để hiển thị lại trên ô input ở View
-            ViewBag.CurrentFilter = searchString;
+            // Sắp xếp bắt buộc trước khi phân trang
+            query = query.OrderBy(nv => nv.maNV);
 
-            // 4. Thực thi query và trả về danh sách
-            return View(query.ToList());
+            // 3. Tính toán phân trang
+            int totalRecords = query.Count();
+            int totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+            // 4. Lấy dữ liệu cho trang hiện tại
+            var data = query.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+            // 5. Truyền thông tin phân trang qua ViewBag
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.HasPreviousPage = pageNumber > 1;
+            ViewBag.HasNextPage = pageNumber < totalPages;
+
+            return View(data);
         }
 
         #region Thêm mới nhân viên
@@ -421,6 +459,11 @@ namespace human_resource_management.Areas.HumanResource.Controllers
             }
         }
 
+        /// <summary>
+        /// GET: Thống kê nhân sự.
+        /// - Hiển thị báo cáo phân bổ nhân sự theo từng phòng ban.
+        /// - Dữ liệu dùng để vẽ biểu đồ tròn (Pie Chart).
+        /// </summary>
         public ActionResult Statistical()
         {
             // Sử dụng 'using' để quản lý bộ nhớ tốt nhất

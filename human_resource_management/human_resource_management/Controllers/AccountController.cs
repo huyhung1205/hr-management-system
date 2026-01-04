@@ -10,11 +10,15 @@ using human_resource_management.Models;
 
 namespace human_resource_management.Controllers
 {
+    /// <summary>
+    /// Controller quản lý xác thực và phân quyền người dùng (Đăng nhập, Đăng xuất).
+    /// </summary>
     public class AccountController : Controller
     {
         private ModelDBContext db = new ModelDBContext();
 
-        // GET: Account/Login
+        // GET: Account/Login - Hiển thị trang đăng nhập
+
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -22,7 +26,8 @@ namespace human_resource_management.Controllers
             return View();
         }
 
-        // POST: Account/Login
+        // POST: Account/Login - Xử lý đăng nhập
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -30,12 +35,14 @@ namespace human_resource_management.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Find user with matching username and password (plain text for now)
+                // Tìm kiếm tài khoản khớp Username và Password (đang so sánh plain text)
+
                 var user = db.TaiKhoans.FirstOrDefault(u => u.tenTK == model.TenTK && u.matKhau == model.MatKhau);
 
                 if (user != null)
                 {
-                    // Create authentication ticket with role information
+                    // Tạo Authentication Ticket chứa thông tin vai trò (Role)
+
                     FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(
                         1,
                         user.tenTK,
@@ -46,29 +53,33 @@ namespace human_resource_management.Controllers
                         FormsAuthentication.FormsCookiePath
                     );
 
-                    // Encrypt the ticket
+                    // Mã hóa Auth Ticket
                     string encryptedTicket = FormsAuthentication.Encrypt(ticket);
 
-                    // Create cookie with proper settings
+                    // Tạo Cookie xác thực với cấu hình bảo mật
+
                     HttpCookie authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
                     authCookie.HttpOnly = true;
                     authCookie.Path = FormsAuthentication.FormsCookiePath;
                     authCookie.Expires = ticket.Expiration;
                     Response.Cookies.Add(authCookie);
 
-                    // Store user info in session
+                    // Lưu thông tin người dùng vào Session để sử dụng trong phiên làm việc
+
                     Session["UserName"] = user.tenTK;
                     Session["UserRole"] = user.vaiTro;
                     Session["MaNV"] = user.maNV;
 
-                    // Redirect based on role
+                    // Điều hướng dựa trên Vai trò (Role)
+
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                     {
                         return Redirect(returnUrl);
                     }
                     else
                     {
-                        // Redirect to appropriate area based on role
+                        // Chuyển hướng đến Area tương ứng với Vai trò
+
                         switch (user.vaiTro)
                         {
                             case "Admin":
@@ -91,7 +102,8 @@ namespace human_resource_management.Controllers
             return View(model);
         }
 
-        // GET: Account/Logout
+        // GET: Account/Logout - Xử lý đăng xuất
+
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
@@ -99,7 +111,7 @@ namespace human_resource_management.Controllers
             return RedirectToAction("Login", "Account");
         }
 
-        // Helper method to hash password with SHA256
+        // Hàm hỗ trợ: Mã hóa mật khẩu bằng thuật toán SHA256 (nên dùng khi đăng ký/đổi mật khẩu)
         private string HashPassword(string password)
         {
             using (SHA256 sha256 = SHA256.Create())

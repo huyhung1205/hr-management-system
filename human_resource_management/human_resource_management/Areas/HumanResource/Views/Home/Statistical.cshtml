@@ -1,14 +1,23 @@
 ﻿﻿@model IEnumerable<human_resource_management.Models.PhongBan>
+@*
+    MÔ TẢ VIEW: THỐNG KÊ NHÂN SỰ
+    -------------------------------------------------
+    View này hiển thị báo cáo tổng quan về nhân sự theo phòng ban.
+    - Sử dụng: Google Charts API để vẽ biểu đồ tròn (Pie Chart).
+    - Hiển thị bảng số liệu chi tiết bên trái và biểu đồ trực quan bên phải.
+*@
 
 @{
     ViewBag.Title = "Thống kê nhân sự";
     Layout = "~/Areas/HumanResource/Views/Shared/_Layout.cshtml";
 
-    // Tạo một mảng đối tượng ẩn danh để chuyển sang JSON
+    // CHUẨN BỊ DỮ LIỆU CHO BIỂU ĐỒ (Server-side)
+    // Chuyển đổi dữ liệu Model (Entity) sang dạng mảng JSON đơn giản để JS có thể đọc được
+    // Cấu trúc: [Tên Phòng, Số Lượng]
     var chartData = Model.Select(pb => new object[]
     {
         pb.tenPB,
-        pb.NhanViens?.Count ?? 0 // Toán tử null-coalescing (??) gọn gàng hơn
+        pb.NhanViens?.Count ?? 0 // Sử dụng toán tử null-coalescing (??) để tránh lỗi null
     }).ToList();
 }
 
@@ -86,36 +95,45 @@
     </div>
 </div>
 
+<!-- TÍCH HỢP GOOGLE CHARTS -->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
+    // Load thư viện visualcore
     google.charts.load("current", { packages: ["corechart"] });
+    // Gọi hàm vẽ biểu đồ sau khi thư viện tải xong
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
+        // 1. Nhận dữ liệu từ Server (đã encode JSON)
         var serverData = @Html.Raw(Json.Encode(chartData));
 
-        // Header của biểu đồ
+        // 2. Định nghĩa Header của dữ liệu (Yêu cầu của Google Charts)
         var chartDataArray = [['Phòng Ban', 'Số Lượng']];
 
-        // Gộp header và dữ liệu từ server
+        // 3. Gộp Header và Dữ liệu
         chartDataArray = chartDataArray.concat(serverData);
 
+        // 4. Chuyển đổi sang định dạng DataTable chuyên dụng
         var data = google.visualization.arrayToDataTable(chartDataArray);
 
+        // 5. Cấu hình giao diện biểu đồ
         var options = {
             title: 'Tỷ lệ phân bố nhân sự',
             is3D: false,
-            pieHole: 0.4,
+            pieHole: 0.4, // Tạo biểu đồ dạng Donut
             tooltip: { isHtml: true },
             chartArea: { left: '10%', top: '10%', width: '80%', height: '80%' },
             titleTextStyle: { fontSize: 16, bold: true, color: '#374151' },
             legend: { position: 'right', alignment: 'center', textStyle: { fontSize: 13 } },
+            // Bảng màu tùy chỉnh đẹp mắt hơn màu mặc định
             colors: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#6366f1']
         };
 
+        // 6. Vẽ biểu đồ lên thẻ div #piechart
         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
         chart.draw(data, options);
     }
 
+    // Tự động vẽ lại biểu đồ khi thay đổi kích thước cửa sổ (Responsive)
     window.onresize = drawChart;
 </script>

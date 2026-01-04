@@ -2,6 +2,15 @@
 @using Newtonsoft.Json;
 
 @model dynamic
+@*
+    MÔ TẢ VIEW: QUẢN LÝ TÍNH LƯƠNG
+    -------------------------------------------------
+    View này xử lý toàn bộ quy trình tính lương cho nhân viên theo tháng:
+    1. Chọn kỳ lương (Tháng/Năm).
+    2. Hiển thị danh sách nhân viên cần tính lương (nếu chưa tính).
+    3. Nút "Tính toán" để kích hoạt logic tính lương tự động.
+    4. Hiển thị bảng chi tiết lương sau khi tính toán xong.
+*@
 
 @{
     ViewBag.Title = "Quản lý lương";
@@ -9,7 +18,8 @@
 }
 
 <div class="space-y-6">
-    <!-- Phần 1: Form chọn kỳ lương (luôn hiển thị) -->
+    <!-- KHỐI 1: BỘ LỌC KỲ LƯƠNG -->
+    <!-- Cho phép người dùng chọn Tháng và Năm làm việc -->
     <div class="bg-white rounded-lg shadow-sm p-6">
         <h3 class="text-lg font-bold text-gray-800 mb-4">
             <i class="fa-solid fa-calculator text-blue-600 mr-2"></i>
@@ -32,7 +42,7 @@
                     </select>
                 </div>
 
-                <!-- Lựa chọn Năm -->
+                <!-- Dropdown chọn Năm: Từ năm hiện tại -2 đến +1 -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         <i class="fa-solid fa-calendar-days text-gray-500 mr-1"></i>
@@ -125,7 +135,8 @@
         SalaryDetails type: @(salaryDetails?.GetType().Name ?? "null") | Count: @(salaryDetails?.Count ?? 0)
     </div>
 
-    <!-- Phần 2: Danh sách nhân viên (hiển thị nếu chưa có bảng lương) -->
+    <!-- KHỐI 2: TRƯỜNG HỢP CHƯA CÓ BẢNG LƯƠNG -->
+    <!-- Hiển thị danh sách nhân viên sẵn sàng để tính lương. Dữ liệu này giúp HR kiểm tra trước khi bấm tính -->
     @if (ViewBag.EmployeeSalaryData != null && ViewBag.EmployeeSalaryData.Count > 0)
     {
         <div class="bg-white rounded-lg shadow-sm p-6">
@@ -176,7 +187,8 @@
         </div>
     }
 
-    <!-- Phần 3: Bảng chi tiết lương (hiển thị nếu đã có bảng lương) -->
+    <!-- KHỐI 3: TRƯỜNG HỢP ĐÃ TÍNH LƯƠNG XONG -->
+    <!-- Hiển thị chi tiết bảng lương đã được lưu trong database. Cho phép xem, sửa hoặc xóa lại để tính lại -->
     @if (ViewBag.SalaryDetails != null && ViewBag.SalaryDetails.Count > 0)
     {
         <div class="bg-white rounded-lg shadow-sm p-6">
@@ -266,7 +278,7 @@
         </div>
     }
 
-    <!-- Phần 4: Ghi chú công thức (luôn hiển thị) -->
+    <!-- KHỐI 4: GHI CHÚ QUY TẮC TÍNH TOÁN -->
     <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
         <h4 class="font-semibold text-blue-900 mb-2">
             <i class="fa-solid fa-book text-blue-600 mr-2"></i>

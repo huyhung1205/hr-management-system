@@ -1,4 +1,11 @@
 ﻿@model human_resource_management.Models.FormModel.NhanVienForm
+@*
+    MÔ TẢ VIEW: TẠO MỚI HỒ SƠ NHÂN VIÊN
+    -------------------------------------------------
+    View này cung cấp Form nhập liệu để thêm mới nhân viên.
+    - Model sử dụng: NhanVienForm (Model chuyên dụng cho việc tạo mới, gộp cả thông tin NV và Hợp đồng).
+    - Bao gồm validation (kiểm tra dữ liệu) cả phía client và server.
+*@
 
 @{
     ViewBag.Title = "Quản lý nhân viên";
@@ -21,20 +28,25 @@
     </div>
 
     <!-- Tiêu đề trang nổi bật với Gradient -->
+    <!-- 1. TIÊU ĐỀ SECTION -->
     <div class="bg-gradient-to-r from-blue-600 to-blue-800 p-8 rounded-2xl shadow-lg text-white mb-8">
         <h2 class="text-3xl font-bold">Tạo hồ sơ nhân sự</h2>
         <p class="text-blue-100 mt-2">Vui lòng cung cấp chính xác thông tin nhân viên để lưu trữ vào hệ thống quản lý.</p>
     </div>
 
-    <!-- Bắt đầu Form nhập liệu -->
+    <!-- 2. FORM NHẬP LIỆU -->
+    <!-- BeginForm sẽ tạo thẻ <form> gửi dữ liệu đến Action "Create" của Controller "Home" bằng phương thức POST -->
     @using (Html.BeginForm("Create", "Home", FormMethod.Post, new { @class = "space-y-8" }))
     {
+        <!-- Token chống giả mạo request (CSRF Protection) -->
         @Html.AntiForgeryToken()
-        <!-- Tóm tắt lỗi Validation nếu có -->
+        
+        <!-- Hiển thị tổng hợp lỗi validation (nếu có) từ Server trả về -->
         @Html.ValidationSummary(true, "", new { @class = "text-red-500 bg-red-50 p-4 rounded-xl border border-red-100 mb-6" })
         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
             
-            <!-- Phần 1: Thông tin cá nhân cơ bản -->
+            <!-- A. NHÓM THÔNG TIN CÁ NHÂN -->
+            <!-- Chứa các trường: Họ tên, Ngày sinh, Giới tính, Liên lạc -->
             <div class="p-6 border-b border-gray-100 flex items-center gap-4 bg-gray-50/50">
                 <div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center font-bold">
                     1
@@ -121,7 +133,8 @@
                 </div>
             </div>
 
-            <!-- Phần 2: Thông tin công việc & Vị trí -->
+            <!-- B. NHÓM THÔNG TIN CÔNG VIỆC -->
+            <!-- Chứa các trường: Phòng ban (Dropdown), Chức vụ, Ngày vào làm -->
             <div class="p-6 border-b border-t border-gray-100 flex items-center gap-4 bg-gray-50/50">
                 <div class="w-10 h-10 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center font-bold">
                     2
@@ -187,14 +200,14 @@
                 </div>
             </div>
 
-            <!-- Phần 3: Thông tin hợp đồng khởi tạo -->
+            <!-- C. NHÓM THÔNG TIN HỢP ĐỒNG KHỞI TẠO -->
+            <!-- Khi tạo nhân viên mới, hệ thống bắt buộc tạo kèm Hợp đồng đầu tiên -->
             <div class="p-6 border-b border-t border-gray-100 flex items-center gap-4 bg-gray-50/50">
                 <div class="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center font-bold">
                     3
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-gray-800">Thông tin hợp đồng</h3>
-
                 </div>
             </div>
 
